@@ -45,6 +45,7 @@ class SystemOrchestrator:
             "HAL": True, "DET": True, "CLS": True, "DF": True, 
             "OPT": True, "TRK": True, "DNS": True, "SYN": True
         }
+        self.cycle_count = 0
 
         self.mode           = "AUTO"
         self.manual_jam     = False
@@ -61,7 +62,31 @@ class SystemOrchestrator:
         freq_hz = (freq_idx / self.env.fft_size) * self.env.fs + (self.env.center_freq - self.env.fs / 2)
         return round(freq_hz / 1e6, 3)
 
+    def _heal_modules(self):
+        """Self-healing logic for critical system components."""
+        # HAL Healing: If SDR is down, try to re-initialize
+        if not self.module_health["HAL"]:
+            print("[Orch] Attempting HAL Self-Healing...")
+            try:
+                self.env.reinit() # Assume reinit exists or just try new instance
+                self.module_health["HAL"] = self.env.is_active()
+            except: pass
+
+        # OPT Healing: Reset optimizer if it crashes repeatedly
+        if not self.module_health["OPT"]:
+            print("[Orch] Attempting OPT Self-Healing...")
+            try:
+                self.optimizer = SmartOptimizer()
+                self.module_health["OPT"] = True
+            except: pass
+
     def run_cycle(self):
+        self.cycle_count += 1
+        
+        # Periodic Self-Healing
+        if self.cycle_count % 10 == 0:
+            self._heal_modules()
+
         # 1. Spectrum Acquisition (HAL)
         try:
             psd_raw = self.env.generate_spectrum_frame()

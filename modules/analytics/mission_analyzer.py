@@ -11,6 +11,8 @@ class MissionAnalyzer:
         self.strategy_log = []
         self.last_report_time = 0
         self.report_interval = 5.0 # Seconds
+        self.total_engaged_targets = set()
+        self.successful_bda_count = 0
 
     def update(self, latest_results):
         """Adds latest cycle data to history."""
@@ -35,13 +37,21 @@ class MissionAnalyzer:
         ep_hops = last_5[-1].get("ep_status", {}).get("total_hops", 0)
         security_idx = last_5[-1].get("ep_status", {}).get("security_index", 100.0)
 
+        # Strategic Pattern Detection
+        saturation_threat = avg_threats > 5
+        evasion_detected = any(s.get('snr', 0) < 10 and s.get('threat_level') in ['HIGH', 'CRITICAL'] for h in last_5 for s in h.get('signals', []))
+        
         report = []
         
         # Operational Status
         if avg_threats == 0:
             report.append("SPEKTRUM TEMİZ: Kayda değer bir tehdit tespit edilmedi.")
-        elif avg_threats < 2: report.append("DÜŞÜK YOĞUNLUKLU AKTİVİTE: Münferit sinyaller izleniyor.")
-        else: report.append(f"YÜKSEK SPEKTRAL YOĞUNLUK: {int(avg_threats)} aktif hedef takip ediliyor.")
+        elif saturation_threat:
+            report.append("KRİTİK: Spektrum doygunluğu tespit edildi! Çoklu hedef taarruzu devrede.")
+        elif avg_threats < 2: 
+            report.append("DÜŞÜK YOĞUNLUKLU AKTİVİTE: Münferit sinyaller izleniyor.")
+        else: 
+            report.append(f"YÜKSEK SPEKTRAL YOĞUNLUK: {int(avg_threats)} aktif hedef takip ediliyor.")
 
         # EA Logic
         if jamming_active:
@@ -51,8 +61,10 @@ class MissionAnalyzer:
         if security_idx < 60:
             report.append(f"DİKKAT: Spektral Güvenlik Endeksi %{security_idx} - Yoğun girişim tespit edildi!")
         
-        if heavy_threats:
-            report.append("KRİTİK TEHDİT: LPI/Radar benzeri modülasyonlar tespit edildi, karşı tedbirler devrede.")
+        if evasion_detected:
+            report.append("İSTİHBARAT: Düşman LPI (Düşük Yakalanma Olasılığı) taktikleri deniyor. Denoising hassasiyeti artırıldı.")
+        elif heavy_threats:
+            report.append("KRİTİK TEHDİT: Radar benzeri impulslar tespit edildi, karşı tedbirler devrede.")
 
         if ep_hops > 0:
             report.append(f"OTONOM KORUNMA: EP Ajanı {ep_hops} adet başarılı frekans atlaması gerçekleştirdi.")

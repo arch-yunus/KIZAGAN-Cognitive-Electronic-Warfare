@@ -10,17 +10,17 @@ Bu belge, "Otonom Elektronik Harp Sistemi (Cognitive-EW-Suite)" projesi kapsamı
 - [x] Elektronik Destek ve Elektronik Taarruz
 
 **2. Yarışmaya katılacak olan EH Sistemi kaç adet Sistem’den oluşmaktadır?**
-Yarışmaya toplamda 4 adet sistem birimi ile katılım sağlanacaktır. Elektronik Destek (ED) kapsamında konum belirleme görevi (TDOA) için 3 adet eşgüdümlü çalışan ED alıcı (sensör) sistemi kullanılacaktır. Elektronik Taarruz (ET) ve genel spektrum yönetimi için merkez ağ geçidi işlevi görecek 1 adet ED/ET kombine taarruz ve haberleşme/merkez birimi görev yapacaktır.
+Yarışmaya toplamda 4 adet operasyonel birim ile katılım sağlanacaktır. Elektronik Destek (ED) fazında yüksek hassasiyetli konum belirleme (TDOA) icrası için 3 adet zaman-senkronizasyonlu alıcı nodu kullanılacaktır. Sistemin kalbi olan 4. birim ise hem ED verilerini birleştiren bir merkez ağ geçidi (Gateway) hem de otonom Elektronik Taarruz (ET) sinyallerini yayınlayan ana taarruz ünitesidir.
 
 **3. Yarışmaya katılacak olan EH Sistemi hangi işlevleri yerine getirmektedir?**
 - **Elektronik Destek:** Sinyal Tespiti, Parametre Çıkarımı, Sinyal İzleme/Dinleme, Yön Bulma (DF), Konum Belirleme, AI Destekli Sınıflandırma ve Neural Denoising (Diğer: max 300 karakter).
 - **Elektronik Taarruz:** Sürekli Karıştırma, Ara-Bakışlı Karıştırma, Analog Telsiz Aldatma, GNSS Aldatma, DRFM tabanlı Hedef Simülasyonu ve FHSS Kestirimli Taarruz (Diğer: max 300 karakter).
 
 **4. Yarışmaya katılacak olan EH Sistemini tanıtınız.**
-Sistem, HW-Agnostic strateji ve SDR donanımları (USRP) odağında geliştirilecektir. Hazır modüller yerine spektrum sentez, derin öğrenme (PyTorch/CUDA) ve EW karar destek algoritmaları uçtan uca özgün kodlanacaktır. Komuta kontrolü Flask Socket.io tabanlı tasarlanacak ve "Siber Operatör C2 Dashboard" üzerinden yönetilecektir. Mimari yapı, spektral hedefleri tespit, takip ve taarruz döngüsünde otonom icra edebilen bilişsel bir altyapıya sahip olacaktır.
+Sistemimiz, "Bilişsel Elektronik Harp" (Cognitive EW) paradigmasını temel alan, donanım bağımsız (HW-Agnostic) ve tamamen modüler bir mimariye sahiptir. Temel işlem birimi olarak USRP serisi SDR donanımları kullanılacak; spektrum analizi, modülasyon kestirimi ve taarruz optimizasyonu süreçlerinde Pytorch tabanlı Derin Öğrenme modelleri (CNN, LSTM) ve Reinforcement Learning (DQN) ajanları görev yapacaktır. Operatör denetimi, düşük gecikmeli (<100ms) WebSocket tabanlı "Siber Operatör C2 Dashboard" üzerinden sağlanmakta olup, sistem reaktif değil proaktif (kestirimci) EH yeteneği sunar.
 
 **5. Sistem mimarinizi açıklayınız.**
-Sistem Mimarisi 4 ana bloktan oluşacaktır: (1) SDR Hardware Abstraction Layer, (2) Adaptive CV tabanlı Spektral Hedef Tespit ve CA-CFAR Modülü, (3) PyTorch Yapay Zeka Sınıflandırma ve LSTM FHSS Tahmin Ağı, (4) Deep Q-Network (DQN) tabanlı Otonom Görev Yöneticisi ve C2 Dashboard. _(Detaylı Sistem Blok Şeması, KYS sistemine "sistem_blok_semasi.png" adlı görsel olarak yüklenecektir.)_
+Sistem Mimarisi 4 katmanlı hiyerarşik bir yapıdadır: (1) SDR Hardware Abstraction Layer (HAL) ile ham I/Q verisinin standartlaştırılması, (2) Adaptive Computer Vision ve CA-CFAR ile spektral anomali tespiti, (3) PyTorch MLP/CNN ve LSTM ağları ile bilişsel sınıflandırma/tahminleme, (4) Deep Q-Network (DQN) tabanlı Otonom Görev Makinesi (Mission State Machine) ve Web-C2 Dashboard. _(Detaylı Sistem Blok Şeması, KYS sistemine "sistem_blok_semasi.png" adlı görsel olarak yüklenecektir.)_
 
 **6. Sistemin entegre olacağı platformu açıklayınız.**
 - **Seçim:** Karada, Taşınabilir (kullanım sırasında hareketli)

@@ -65,12 +65,13 @@ Sistem, reaktif bir loop yerine artık proaktif bir **Mission State Machine** ta
 - **TRACK (Kilitlenme):** Tehdidin özniteliklerini (Modülasyon, RFI Signature) çıkarma ve LSTM Predictor ile gelecek frekansını tahmin etme.
 - **ENGAGE (Taarruz):** Pekiştirmeli öğrenme ajanı vasıtasıyla optimize edilmiş karıştırma sinyali uygulama.
 - **EVALUATE (BDA - Hasar Tespit):** Angajman sonrası saniyeler içinde karıştırmayı durdurup hedefin etkisizleştiğini (Signal Kill) veya kaçtığını otonom olarak doğrulama.
+- **SELF-HEAL (Otonom Onarım):** HAL ve OPT katmanlarındaki olası kararsızlıkları/çökmeleri otonom olarak tespit edip sistemi yeniden başlatan koruma döngüsü (V9.1).
 
 ---
 
 ### 🛡️ Bilişsel Korunma ve Operasyonel İstihbarat (V9 Protection & Intel)
 - **Electronic Protection (EP) Agent:** Dost unsurları düşman karıştırmasından korumak için otonom frekans atlama (Frequency Hopping) rotaları oluşturan RL ajanı.
-- **Mission Intelligence Analyzer:** Görev süresince toplanan büyük veriyi (Big Data) işleyerek EH operatörüne stratejik özetler sunan bilişsel raporlama ünitesi.
+- **Mission Intelligence Analyzer:** Görev süresince toplanan büyük veriyi (Big Data) işleyerek EH operatörüne stratejik özetler sunan bilişsel raporlama ünitesi. v9.0 ile birlikte "Doygunluk Taarruzu" ve "Evasive Pattern" (LPI) tespiti eklenmiştir.
 - **Spectral Security Index:** Spektrumun güvenilirlik ve kullanılabilirlik oranını anlık olarak hesaplayan yeni nesil metrik sistemi.
 
 ## 🧠 Bilişsel Yapay Zeka Mimarisi (Phase 3)
