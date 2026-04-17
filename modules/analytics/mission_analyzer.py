@@ -19,58 +19,59 @@ class MissionAnalyzer:
         self.history.append(latest_results)
 
     def generate_strategic_summary(self):
-        """Generates a text-based strategic summary of the mission."""
+        """Generates a high-density strategic summary of the mission."""
         if not self.history:
-            return "SİSTEM BAŞLATILIYOR: Spektrum Gözlem Modu Aktif."
+            return "SİSTEM BAŞLATILIYOR: Bilişsel Spektrum Gözlem Modu Aktif."
 
         now = time.time()
-        # Only update summary at intervals to avoid flickering/noise
-        # if now - self.last_report_time < self.report_interval:
-        #     return self.strategy_log[-1] if self.strategy_log else "ANALİZ EDİLİYOR..."
-
         last_5 = list(self.history)[-5:]
         avg_threats = sum(len(h.get("signals", [])) for h in last_5) / len(last_5)
         
-        # Detect patterns
+        # Advanced Pattern Detection
         jamming_active = any(h.get("ea_status", {}).get("action") != "STANDBY" for h in last_5)
         heavy_threats = any(any(s.get("threat_level") in ["HIGH", "CRITICAL"] for s in h.get("signals", [])) for h in last_5)
         ep_hops = last_5[-1].get("ep_status", {}).get("total_hops", 0)
         security_idx = last_5[-1].get("ep_status", {}).get("security_index", 100.0)
 
-        # Strategic Pattern Detection
+        # Strategic Pattern Logic (v10.0)
+        # 1. Saturation Attack (Doygunluk Taarruzu)
         saturation_threat = avg_threats > 5
-        evasion_detected = any(s.get('snr', 0) < 10 and s.get('threat_level') in ['HIGH', 'CRITICAL'] for h in last_5 for s in h.get('signals', []))
+        
+        # 2. Evasive LPI Pattern (Gizlenme Girişimi)
+        evasion_detected = any(
+            s.get('snr', 0) < 8 and s.get('threat_level') in ['HIGH', 'CRITICAL'] 
+            for h in last_5 for s in h.get('signals', [])
+        )
+
+        # 3. Dynamic RFI Signature Analysis (RF Parmak İzi)
+        unknown_rfi = any(s.get('rfi_hash') == 'UNKNOWN' for h in last_5 for s in h.get('signals', []))
         
         report = []
         
-        # Operational Status
-        if avg_threats == 0:
-            report.append("SPEKTRUM TEMİZ: Kayda değer bir tehdit tespit edilmedi.")
-        elif saturation_threat:
-            report.append("KRİTİK: Spektrum doygunluğu tespit edildi! Çoklu hedef taarruzu devrede.")
-        elif avg_threats < 2: 
-            report.append("DÜŞÜK YOĞUNLUKLU AKTİVİTE: Münferit sinyaller izleniyor.")
-        else: 
-            report.append(f"YÜKSEK SPEKTRAL YOĞUNLUK: {int(avg_threats)} aktif hedef takip ediliyor.")
-
-        # EA Logic
-        if jamming_active:
-            report.append("ELEKTRONİK TAARRUZ: AI Optimizer aktif karıştırma politikası uyguluyor.")
-        
-        # EP Logic
-        if security_idx < 60:
-            report.append(f"DİKKAT: Spektral Güvenlik Endeksi %{security_idx} - Yoğun girişim tespit edildi!")
-        
+        # Priority 1: Critical Saturation or Evasion
+        if saturation_threat:
+            report.append("KRİTİK: Doygunluk Taarruzu tespit edildi! EA-Master çoklu angajman moduna geçti.")
         if evasion_detected:
-            report.append("İSTİHBARAT: Düşman LPI (Düşük Yakalanma Olasılığı) taktikleri deniyor. Denoising hassasiyeti artırıldı.")
-        elif heavy_threats:
-            report.append("KRİTİK TEHDİT: Radar benzeri impulslar tespit edildi, karşı tedbirler devrede.")
+            report.append("İSTİHBARAT: Evasive LPI (Düşük Yakalanma Olasılığı) taktikleri denendiği öngörülüyor. Neural Denoiser hassasiyeti maksimize edildi.")
 
-        if ep_hops > 0:
-            report.append(f"OTONOM KORUNMA: EP Ajanı {ep_hops} adet başarılı frekans atlaması gerçekleştirdi.")
+        # Priority 2: Operational Status
+        if avg_threats == 0:
+            report.append("SPEKTRUM TEMİZ: Spektral Güvenlik Endeksi stabil.")
+        elif not saturation_threat:
+            report.append(f"OPERASYONEL: {int(avg_threats)} aktif hedef otonom takip döngüsünde.")
 
-        # Final Summary selection
-        summary = " | ".join(report)
+        # Priority 3: Electronic Defense/Attack
+        if ep_hops > 3:
+            report.append(f"EP AJANI: Düşman karıştırması tespit edildi; {ep_hops} adet başarılı otonom frekans atlaması gerçekleştirildi.")
+        
+        if jamming_active:
+            action = last_5[-1].get("ea_status", {}).get("action", "JAM")
+            report.append(f"ET AKTİF: DQN Optimizer {action} politikasıyla domine ediyor.")
+
+        if unknown_rfi and avg_threats > 0:
+            report.append("UYARI: Bilinmeyen RF imzası tespit edildi. İstihbarat veri tabanı güncelleniyor.")
+
+        summary = " | ".join(report[:4]) # Keep it high-density but readable
         self.strategy_log.append(summary)
         self.last_report_time = now
         

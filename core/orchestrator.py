@@ -63,22 +63,31 @@ class SystemOrchestrator:
         return round(freq_hz / 1e6, 3)
 
     def _heal_modules(self):
-        """Self-healing logic for critical system components."""
-        # HAL Healing: If SDR is down, try to re-initialize
-        if not self.module_health["HAL"]:
-            print("[Orch] Attempting HAL Self-Healing...")
-            try:
-                self.env.reinit() # Assume reinit exists or just try new instance
-                self.module_health["HAL"] = self.env.is_active()
-            except: pass
-
-        # OPT Healing: Reset optimizer if it crashes repeatedly
-        if not self.module_health["OPT"]:
-            print("[Orch] Attempting OPT Self-Healing...")
-            try:
-                self.optimizer = SmartOptimizer()
-                self.module_health["OPT"] = True
-            except: pass
+        """Self-healing logic for critical system components using a watchdog pattern."""
+        for module, healthy in self.module_health.items():
+            if not healthy:
+                print(f"[Orch] Watchdog ALERT: {module} is down. Attempting restoration...")
+                try:
+                    if module == "HAL":
+                        self.env.reinit()
+                        self.module_health["HAL"] = self.env.is_active()
+                    elif module == "OPT":
+                        self.optimizer = SmartOptimizer()
+                        self.module_health["OPT"] = True
+                    elif module == "DET":
+                        self.detector = WaterfallDetector()
+                        self.module_health["DET"] = True
+                    elif module == "CLS":
+                        self.classifier = ModulationClassifier()
+                        self.module_health["CLS"] = True
+                    elif module == "SYN":
+                        self.synth = WaveformSynthesizer()
+                        self.module_health["SYN"] = True
+                    
+                    if self.module_health.get(module):
+                        print(f"[Orch] SUCCESS: {module} restored.")
+                except Exception as e:
+                    print(f"[Orch] FAILED to heal {module}: {e}")
 
     def run_cycle(self):
         self.cycle_count += 1

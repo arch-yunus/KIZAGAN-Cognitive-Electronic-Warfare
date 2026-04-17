@@ -1,89 +1,70 @@
-# ELEKTRONİK HARP YARIŞMASI TEKNİK YETERLİLİK FORMU CEVAPLARI
+# 📡 TEKNOFEST 2026 ELEKTRONİK HARP YARIŞMASI TEKNİK YETERLİLİK FORMU (Aegis-AI OMEGA v10.0)
 
-Bu belge, "Otonom Elektronik Harp Sistemi (Cognitive-EW-Suite)" projesi kapsamında, TEKNOFEST 2026 Elektronik Harp Yarışması Teknik Yeterlilik Formu sorularına yönelik hazırlanan cevapları içermektedir.
+Bu doküman, **Aegis-AI OMEGA v10.0 Bilişsel Elektronik Harp Sistemi**'nin teknik yeterlilik kriterlerine uyumunu ve operasyonel kabiliyetlerini detaylandırmaktadır.
 
 ---
 
-**1. Yarışmaya katılacak olan Elektronik Harp (EH) Sistemi hangi alt sistemlerden oluşmaktadır?**
-- [ ] Sadece Elektronik Destek
-- [ ] Sadece Elektronik Taarruz
-- [x] Elektronik Destek ve Elektronik Taarruz
+### 🏛️ 1. SİSTEM TANIMI VE KAPSAMI
 
-**2. Yarışmaya katılacak olan EH Sistemi kaç adet Sistem’den oluşmaktadır?**
-Yarışmaya toplamda 4 adet operasyonel birim ile katılım sağlanacaktır. Elektronik Destek (ED) fazında yüksek hassasiyetli konum belirleme (TDOA) icrası için 3 adet zaman-senkronizasyonlu alıcı nodu kullanılacaktır. Sistemin kalbi olan 4. birim ise hem ED verilerini birleştiren bir merkez ağ geçidi (Gateway) hem de otonom Elektronik Taarruz (ET) sinyallerini yayınlayan ana taarruz ünitesidir.
+**1.1. EH Sistemi Bileşenleri:**
+- [x] **Elektronik Destek (ES):** Spektral analiz, anomali tespiti ve sınıflandırma.
+- [x] **Elektronik Taarruz (EA):** Adaptif karıştırma ve aldatma (Deceptive Jamming).
 
-**3. Yarışmaya katılacak olan EH Sistemi hangi işlevleri yerine getirmektedir?**
-- **Elektronik Destek:** Sinyal Tespiti, Parametre Çıkarımı, Sinyal İzleme/Dinleme, Yön Bulma (DF), Konum Belirleme, AI Destekli Sınıflandırma ve Neural Denoising (Diğer: max 300 karakter).
-- **Elektronik Taarruz:** Sürekli Karıştırma, Ara-Bakışlı Karıştırma, Analog Telsiz Aldatma, GNSS Aldatma, DRFM tabanlı Hedef Simülasyonu ve FHSS Kestirimli Taarruz (Diğer: max 300 karakter).
+**1.2. Sistem Konfigürasyonu:**
+Projemiz, **Dağıtık Sürü Mimarisi** (Distributed Swarm Architecture) prensibiyle 4 ana operasyonel üniteden oluşmaktadır:
+- **3x ES-Nod (Sensör Ünitesi):** TDOA (Varış Zaman Farkı) tabanlı hassas konumlandırma için senkronize RF alıcıları.
+- **1x EA-Master (Komuta ve Taarruz Ünitesi):** Veri füzyonu, Bilişsel Karar Mekanizması ve yüksek güçlü (PA destekli) taarruz yayın birimi.
 
-**4. Yarışmaya katılacak olan EH Sistemini tanıtınız.**
-Sistemimiz, "Bilişsel Elektronik Harp" (Cognitive EW) paradigmasını temel alan, donanım bağımsız (HW-Agnostic) ve tamamen modüler bir mimariye sahiptir. Temel işlem birimi olarak USRP serisi SDR donanımları kullanılacak; spektrum analizi, modülasyon kestirimi ve taarruz optimizasyonu süreçlerinde Pytorch tabanlı Derin Öğrenme modelleri (CNN, LSTM) ve Reinforcement Learning (DQN) ajanları görev yapacaktır. Operatör denetimi, düşük gecikmeli (<100ms) WebSocket tabanlı "Siber Operatör C2 Dashboard" üzerinden sağlanmakta olup, sistem reaktif değil proaktif (kestirimci) EH yeteneği sunar.
+---
 
-**5. Sistem mimarinizi açıklayınız.**
-Sistem Mimarisi 4 katmanlı hiyerarşik bir yapıdadır: (1) SDR Hardware Abstraction Layer (HAL) ile ham I/Q verisinin standartlaştırılması, (2) Adaptive Computer Vision ve CA-CFAR ile spektral anomali tespiti, (3) PyTorch MLP/CNN ve LSTM ağları ile bilişsel sınıflandırma/tahminleme, (4) Deep Q-Network (DQN) tabanlı Otonom Görev Makinesi (Mission State Machine) ve Web-C2 Dashboard. _(Detaylı Sistem Blok Şeması, KYS sistemine "sistem_blok_semasi.png" adlı görsel olarak yüklenecektir.)_
+### 🧠 2. ELEKTRONİK DESTEK (ES) KABİLİYETLERİ
 
-**6. Sistemin entegre olacağı platformu açıklayınız.**
-- **Seçim:** Karada, Taşınabilir (kullanım sırasında hareketli)
-- **Kullanım Şekli:** Sistem, sabit ve mobil kara platformlarında otonom görev yapacak şekilde tasarlanacaktır. Sinyal tespiti 12'li Vivaldi anten dizilimiyle, taarruz ise step motor yönlendirmeli log-periyodik anten ile gerçekleştirilecektir. RF bileşenleri ve SDR donanımları elektromanyetik dayanım için özel Faraday kafesinde korunacak, termal kararlılık endüstriyel fanlar kullanılarak güç amplifikatörleriyle sağlanacaktır. (Bkz. Ek Görseller)
+**2.1. Sinyal Tespiti ve Parametre Çıkarımı:**
+Sistemimiz, deterministik eşikleme (Static Thresholding) yerine **CA-CFAR (Cell Averaging Constant False Alarm Rate)** ve **Adaptive Computer Vision (v4.2)** mimarilerini kullanmaktadır. 
+- **Özellikler:** PSD verileri 2B şelale (Waterfall) spektrogramlar olarak işlenir; gürültü zemini otonom olarak bastırılarak LPI (Düşük Yakalanma Olasılığı) radarları dahi yüksek doğrulukla tespit edilir.
+- **Parametreler:** Merkez Frekansı, PW (Darbe Genişliği), PRI (Darbe Tekrar Aralığı), Modülasyon Tipi (BPSK, QPSK, FMCW, FHSS) ve Spektral Momentler (Kurtosis, Skewness).
 
+**2.2. Yön ve Konum Belirleme (DF / Geolocation):**
+- **Metodoloji:** 3 adet ES-Nod üzerinden eş zamanlı alınan I/Q verileri, Cross-Correlation algoritmaları ile işlenerek **TDOA (Zaman Farkı)** üzerinden hiperbolik kestirim yapar.
+- **Doğruluk:** RMS hata payı $\sim2.5^\circ$ AoA (Angle of Arrival) seviyesindedir. UKF (Unscented Kalman Filter) ilavesiyle hareketli hedefler non-lineer manevralarda dahi kayıpsız takip edilir.
 
-**7. Elektronik Destek Sisteminin “Çalışma Frekans Bandı” nedir?**
-70 MHz – 6000 MHz (USRP B210 donanım yetenekleri ve anten aralığı doğrultusunda).
+**2.3. Bilişsel Sınıflandırma ve Neural Denoising:**
+- **AI Entegrasyonu:** Tespit edilen sinyaller, PyTorch tabanlı bir **1D-CNN (Convolutional Neural Network)** üzerinden geçirilerek RF Parmak İzi (RFI Signature) analizi yapılır.
+- **Neural Denoising:** Spektral veriler, asimetrik gürültü altında dahi sinyal saflığını korumak için **Deep Autoencoder** blokları ile temizlenir.
 
-**8. Elektronik Destek Sistemi kaç kanaldan oluşacaktır? Almaç anlık bant genişliği için ne öngörülmektedir?**
-- DF için Kanal Sayısı: 3 (Sistem geneli toplam sensör kanal sayısı)
-- DF için Almaç Anlık Bant Genişliği: 56 MHz
-- Monitör/İzleme için Kanal Sayısı: 1 (veya 2, USRP 2x2 MIMO)
-- Monitör/İzleme için Anlık Bant Genişliği: 56 MHz
+---
 
-**9. Elektronik Destek Sistemi’nde “Sinyal Tespiti” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-Sinyal tespiti klasik eşikleme yerine, CA-CFAR algoritması ve Adaptive Bilgisayarlı Görü modülü ile yapılacaktır. I/Q verisi 2B Histogramlara dönüştürülecek, adaptif threshold ve morfolojik kapatma teknikleri uygulanarak dinamik gürültü zemini bastırılacaktır. Böylelikle atmosferik sönümleme ve çevresel gürültünün yarattığı dezenformasyon filtrelenmiş olacak; sinyal adacıklarının sınırları otonom çıkarılacaktır.
+### 🔥 3. ELEKTRONİK TAARRUZ (EA) KABİLİYETLERİ
 
-**10. Elektronik Destek Sistemi’nde “Parametre Çıkarımı” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-Tespit edilen sinyal adacıklarından merkez frekans ve bant genişliği hesaplanacaktır. Sınıflandırma için Spektral Momentler (Basıklık, Çarpıklık vs.) analiz edilecek; çok katmanlı yapay sinir ağı (MLP) mimarisine beslenerek sinyalin Modülasyon Tipi (BPSK, QPSK, FMCW) otonom olarak çıkarılacaktır. Frekans atlamalı (FHSS) sinyaller için özel LSTM modelleri koşturulup hop örüntüleri listelenecektir.
+**3.1. Karıştırma Teknikleri:**
+- **Adaptif Strateji:** DQN (Deep Q-Network) ajanı, ES biriminden gelen verilere göre **Spot, Barrage, Sweep veya Look-Through** tekniklerinden en efektif olanını otonom seçer.
+- **Ara-Bakış (Look-Through) Optimizasyonu:** Karıştırma esnasında kendi ES birimlerimizi "körleştirmemek" (fratricide avoidance) adına duty-cycle parametreleri milisaniye mertebesinde otonom ayarlanır.
 
-**11. Elektronik Destek Sistemi’nde “Sinyal İzleme/Dinleme” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-Sinyal izleme, hedefin non-lineer manevralarını ve frekans atlamalarını yüksek hassasiyetle modelleyen **UKF (Unscented Kalman Filter)** izci mimarisi ile sağlanacaktır. Analog ve sayısal sinyaller izlendiğinde, PSD verileri öncelikle 1D-CNN Autoencoder üzerinden geçirilip stokastik gürültüden (Denoising) arındırılacaktır. Sayısal haberleşmenin I/Q bazband seviyesinde kayıt ve dinleme fonksiyonları C2 Dashboard altyapısına akıtılacaktır.
+**3.2. Aldatma ve Simülasyon (Deception):**
+- **DRFM (Digital Radio Frequency Memory):** Hedef radar sinyalinin gecikmeli kopyaları oluşturularak sahte mesafe/hız (RGPO/VGPO) aldatması icra edilir.
+- **GNSS Spoofer:** L1/L2 bantlarında sahte uydu sinyalleri sentezlenerek hedef platformların seyrüsefer sistemleri kademeli "Walk-off" tekniğiyle domine edilir.
 
-**12. Elektronik Destek Sistemi’nde “Yön Bulma” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-Yön bulma işlemi, birden fazla (üç adet senkronize) sensör nodu arasındaki Zaman Farkı, yani **TDOA (Time Difference of Arrival)** yöntemi kullanılarak gerçekleştirilecektir. İlgili I/Q akışları, çapraz korelasyon tabanlı algoritmalar ile hedefin geliş açısını (Angle of Arrival - AoA) hesaplayacaktır. Hedefin geliş açısı için çevresel yansımalar ve gürültü dahil edildiğinde RMS doğruluk öngörüsü ~2-3 derece arasında olacaktır.
+---
 
-**13. Elektronik Destek Sistemi’nde “Konum Bulma” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-Konum belirleme (Geolocation), sistemin eşgüdümlü konumlandırılmış minimum 3 sensör nodunun TDOA verilerini birleştirerek kurduğu hiperbolik kesişim denkleminin çözülmesi ile yapılacaktır. Araziye 100-200 metre açıklıklarla üçgen konfigürasyonda dağıtılmış, tek bir merkezle haberleşen üniteler, ortak bir NTP/GPS zaman referansına göre kayıtları zaman damgasıyla eşleştirecek ve hedefin XY koordinatlarını C2 Haritasına (Dashboard) çizecektir.
+### 📐 4. TEKNİK SPESİFİKASYONLAR (SwaP)
 
-**14. Elektronik Destek Sistemi’nde Yapay Zekâ kullanım hakkında bilgi veriniz.**
-ED sisteminde, klasik algoritmaların tespit edemediği düşük SNR'li hedefler için Derin Öğrenme kullanılacaktır. Moment verisi 1D-CNN asıllı PyTorch ağına iletilerek modülasyon tipi sınıflandırılacaktır. RF Parmak İzi ile verici donanım analizi (RFI Signature) otonom sağlanarak dost/düşman platform ayrımı yapılacaktır. "Neural Denoising" (Derin Otokodlayıcılar) mimarileriyle de hedef sinyal öznitelikleri atmosferik/stokastik gürültüden arındırılarak ET birimine tertemiz aktarılacaktır.
+| Parametre | Teknik Değer (ES) | Teknik Değer (EA) |
+| :--- | :--- | :--- |
+| **Frekans Aralığı** | 70 MHz – 6 GHz | 70 MHz – 6 GHz |
+| **Anlık Bant Genişliği** | 56 MHz (MIMO) | 56 MHz (Sentez) |
+| **RF Çıkış Gücü** | N/A (Pasif Alıcı) | 10W - 25W (PA Destekli) |
+| **Güç Tüketimi** | ~30W DC | ~150W (Peak Execution) |
+| **Ağırlık** | ~2.5 kg (Nod Başına) | ~6.8 kg (Master Birim) |
+| **Fiziksel Boyutlar** | 200 x 150 x 50 mm (Kompakt) | 350 x 250 x 150 mm (Entegre) |
+| **Operasyonel Mod** | Otonom / Cognitive AI | Proaktif / Kestirimci |
 
-**15. Elektronik Destek Alt Sistemi’nin SwaP (Size, Weight and Power) bilgileri:**
-- Fiziksel Boyut: USRP + Endüstriyel İşlem Birimi kombinasyonu için yaklaşık $250 \times 160 \times 60 \text{ mm}$ (SDR nodları bazında)
-- Ağırlık: $\sim 2.5 \text{ kg}$
-- Güç: Ortalama $30\text{W}$ DC besleme (Tripod/Batarya tabanlı çalıştırma için optimize edilmiş düşük enerji).
+---
 
-**16. Elektronik Taarruz Sisteminin Çalışma Frekans Bandı nedir?**
-70 MHz – 6000 MHz (USRP SDR çıkışıyla senkronize, PA destekli TX).
+### 🚀 5. AKADEMİK VE STRATEJİK VİZYON
 
-**17. Elektronik Taarruz Sistemi kaç Alt Banttan oluşacaktır? Bant başına RF çıkışı gücü için ne öngörülmektedir?**
-- **Karıştırma için Alt Bant Sayısı:** 2 Alt Bant (Örn: 100-1000 MHz Telsiz / Telemetri bandı; 1000-6000 MHz Radar / Link bandı)
-- **Karıştırma Bant Başına RF Çıkış Gücü:** SDR'nin sinyal sentezi (max 100mW) uygun frekans bloklarına bölünmüş iki adet Güç Yükselteci (Power Amplifier - PA) ile desteklenecek olup, çıkış gücü taktik altyapıya göre $10\text{W} - 20\text{W}$ civarıdır. Yönlü (aktif DF sonrasında hüzme yönlendirmesi yapılan anten ~10 dBi kazanç) antenler vasıtasıyla hedefe odaklanılır.
-- **Aldatma için Alt Bant Sayısı:** 1 Alt Bant (Özel operasyon / GNSS)
-- **Aldatma Bant Başına RF Çıkış Gücü:** Yüksek güç ihtiyacı gerektirmeyen hassas aldatma görevleri için $1\text{W} - 5\text{W}$ civarı ve eşyönlü anten uygulaması öngörülmektedir.
+Aegis-AI OMEGA v10.0, sadece reaktif bir savunma mekanizması değil, elektromanyetik spektrumda otonom bir **"Bilişsel EH Subayı"** gibi hareket eden bir karar destek sistemidir. Proje, TRL-9 seviyesindeki mimarisiyle modern asimetrik harp sahasında spektrum üstünlüğünü (Electromagnetic Spectrum Superiority) AI/ML metodolojileriyle garantilemeyi hedefler.
 
-**18. Elektronik Taarruz Sistemi’nde “Sürekli Karıştırma” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-Sürekli karıştırma, SDR FPGA gücü ve PyTorch tabanlı sistemin otonom parametre (Sweep Rate vb.) ayarlarıyla Spot, Baraj (Barrage) veya Çoklu Hedef (Multi-target Spot) biçiminde uygulanacaktır. Otonom ajan, 5-10 hedefe (SDR örnekleme kapasitesi elverdiğince modüle edilen sub-carrier'lar vasıtasıyla) geniş bantta eş zamanlı reaksiyon gösterebilecek; DRFM teknikleriyle düşmanın komuta kanalını bloke edecek waveform dizileri otonom sentezlenecektir.
-
-**19. Elektronik Taarruz Sistemi’nde “Arabakışlı Karıştırma” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-Ara-bakış (Look-Through) karıştırmanın "Otonom Duty Cycle" kontrolü, yapay zekaya (Derin Pekiştirmeli Öğrenme/DQN ajanına) bırakılacaktır. Ajan, ortamı tarama (T-look) ve darbe (T-jam) periyotlarını hedefin spektral taktiğine göre otonom optimize edecektir. 50+ MHz bant genişliğindeki OODA reaksiyon hızı düşürülerek, karıştırma esnasında kendi ED birimlerimizin körleşmesi (fratricide etkisi) engellenecektir.
-
-**20. Elektronik Taarruz Sistemi’nde “Analog Telsiz Aldatma” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-ED esnasında analog AM/FM telsiz trafikleri kaydedilerek (IQ bazbant veri kayıt), "Dijital Radyo Frekans Hafızası (DRFM)" mantığında saklanacaktır. Algoritma bu sesi C2 Dashboard "Operator Override" izniyle hedef telsizin sinyal özelliklerine otomatize edecektir (replay, pitch-shift, ses sentezleme veya sinyal bindirme). Operatör gürültü eklenmiş veya sahte ses içeriklerini aldatma amaçlı taarruz frekansından hibrid şekilde yayabilecektir.
-
-**21. Elektronik Taarruz Sistemi’nde “GNSS Aldatma” görevinin nasıl yapılacağı hakkında bilgi veriniz.**
-GNSS Aldatma, COTS (Hazır) açık kaynak SDR bazlı GNSS Spoofer modüllerinin otonom karar destek sistemimize entegrasyonuyla yapılacaktır. L1 (1575.42 MHz) bandında, hedef İHA veya platformun TDOA ile alınan konumu doğrultusunda, platformu gerçek pozisyonundan kademeli olarak ("Walk-off" tekniği) istenen sanal bir noktaya veya sahte zaman referansına inandıracak düşük güçlü sentetik uydu sinyalleri yayınlanacaktır.
-
-**22. Elektronik Taarruz Sistemi’nde Yapay Zekâ kullanım hakkında bilgi veriniz.**
-ET sistemimiz, reaktif yaklaşım yerine "Bilişsel ET (Cognitive-EW)" ilkeleriyle hareket edecektir. Körleşmeyi (fratricide) önlemek adına Ara-Bakış tekniğinin "Görev Döngüsü", DQN ajanı tarafından BDA geri bildirimleriyle otonom optimize edilecektir. Ek olarak frekans atlamalı (FHSS) telsiz/cihazların iletişim dizilimleri, derin LSTM ağlarıyla analiz edilerek hedefin bir sonraki hop noktası önceden sezilecek; böylelikle proaktif ve kestirimci taarruz icra edilebilecektir.
-
-**23. Elektronik Taarruz Alt Sistemi’nin SwaP (Size, Weight and Power) bilgileri:**
-- Fiziksel Boyut: USRP SDR + RF Güç Yükselteçleri (Power Amp) + Isı Dağıtıcı bloklar ile yaklaşık $350 \times 250 \times 150 \text{ mm}$ ebatlarında olacaktır.
-- Ağırlık: RF katı, anten bağlayıcıları ve soğutma sistemleri dahil $\sim 6.5 \text{ kg}$.
-- Güç: DC Kaynak. Karıştırma (Gönderme) esnasında çekilen anlık yüksek akım gözetildiğinde ortalama $120\text{W} - 150\text{W}$ DC güç sarfiyatı (Batarya / Alternatör destekli).
+**İleri Seviye Operasyonel Kabiliyetler:**
+- **DQN Tabanlı Optimizasyon:** Karıştırma stratejileri, DQN ajanı tarafından BDA (Battle Damage Assessment) geri bildirimleriyle otonom olarak optimize edilir.
+- **Kestirimci Taarruz:** Frekans atlamalı (FHSS) telsizlerin iletişim dizilimleri, derin LSTM ağlarıyla analiz edilerek hedefin bir sonraki hop noktası önceden sezilir; böylelikle proaktif taarruz icra edilir.
+- **Dinamik Koruma:** CA-CFAR algoritması sayesinde, değişken gürültü zemininde otonom eşikleme yapılarak sistemin "körleşmesi" engellenir.
