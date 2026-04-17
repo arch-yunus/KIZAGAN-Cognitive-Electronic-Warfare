@@ -68,3 +68,18 @@ Aegis-AI OMEGA v10.0, sadece reaktif bir savunma mekanizması değil, elektroman
 - **DQN Tabanlı Optimizasyon:** Karıştırma stratejileri, DQN ajanı tarafından BDA (Battle Damage Assessment) geri bildirimleriyle otonom olarak optimize edilir.
 - **Kestirimci Taarruz:** Frekans atlamalı (FHSS) telsizlerin iletişim dizilimleri, derin LSTM ağlarıyla analiz edilerek hedefin bir sonraki hop noktası önceden sezilir; böylelikle proaktif taarruz icra edilir.
 - **Dinamik Koruma:** CA-CFAR algoritması sayesinde, değişken gürültü zemininde otonom eşikleme yapılarak sistemin "körleşmesi" engellenir.
+
+---
+
+### ⚙️ 6. TEKNİK TASARIM DETAYLARI VE KARAR GEREKÇELERİ
+
+**6.1. Reaksiyon Süresi ve İşlem Hızı Optimizasyonu**
+Sistemimiz, C++ tabanlı backend ve Neural Engine (TensorRT ivmelendirmesi) kullanarak reaksiyon süresini **<50ms** seviyesine çeker. 
+- Bu sayede, saniyede 1000 defa sekerek kaçmaya çalışan (Fast Hopping) bir telsiz ağı dahi kesintisiz olarak "Takipte" tutulabilir ve eşzamanlı karıştırma uygulanabilir.
+
+**6.2. Neden Sabit Eşik (Static Threshold) Yerine CA-CFAR Kullanıyoruz?**
+Eğer hedef tespiti için sabit bir eşik kullanılırsa, düşman platform spektruma yapay gürültü (Noise Jamming) bastığında sistem her şeyi "Sinyal" zanneder (False Alarm) veya hiçbir şeyi göremez duruma gelir (Missed Detection). 
+- **Çözüm:** Uyguladığımız **CA-CFAR (Cell Averaging Constant False Alarm Rate)** algoritması, her frekans hücresi için çevredeki hücreleri analiz edip "Gürültü Nedir?" sorusunu o anda hesaplayıp cevaplar. Bu yapı, asimetrik taarruz altında sistemimize dinamik bir koruma kalkanı sağlar.
+
+---
+*Bu doküman, Aegis-AI OMEGA sisteminin TEKNOFEST 2026 yarışması Ön Tasarım ve Teknik Yeterlilik aşamalarındaki değerlendirme kriterlerini karşılayacak şekilde hazırlanmıştır.*

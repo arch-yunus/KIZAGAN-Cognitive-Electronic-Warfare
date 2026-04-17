@@ -81,16 +81,5 @@ Sisteme `http://localhost:5000` üzerinden erişebilirsiniz.
 
 ---
 
-## 🚀 Proje Vizyonu
-Aegis-AI OMEGA, elektromanyetik spektrumda hayatta kalmanın sadece "Daha akıllı algoritmalarla" mümkün olacağını savunan akademik ve operasyonel bir vizyondur. TRL-9 seviyesindeki bu iskelet, modüler yapısı sayesinde gerçek donanımlarla bir **"Otonom Elektronik Harp Subayı"** olarak işlev görme nihai hedefine adaydır.
-erek bu süreyi **<50ms** seviyesine çeker. 
-- Bu, saniyede 1000 defa sekerek kaçmaya çalışan (Fast Hopping) bir telsizi dahi "Takipte" tutabilmeyi sağlar.
-
-### 3. CFAR Algoritması: Neden Sabit Eşik Kullanmıyoruz?
-Eğer eşik sabitse, düşman spektruma gürültü (Noise Jamming) bastığında sistem her şeyi "Sinyal" zanneder veya hiçbir şeyi göremez. 
-**CA-CFAR**, her frekans hücresi için "Gürültü Nedir?" sorusunu o anda cevaplar. Bu, dinamik bir koruma kalkanıdır.
-
----
-
 ## 🚀 Akademik Vizyon ve Nihai Otonomi
 Bu proje, salt bir yazılım mimarisi değil, elektromanyetik spektrumda hayatta kalmanın sadece "Daha akıllı algoritmalarla" mümkün olacağını gösteren akademik bir vizyondur. İnsansız Hava Araçları (İHA) ve Otonom Kara Araçları (İKA) için GNU Radio / UHD (USRP Hardware Driver) uyumluluğu gözetilerek yazılmış bu iskelet, modüler yapısı sayesinde gerçek donanımlarla bir "Otonom Elektronik Harp Subayı" olarak işlev görme nihai hedefine (TRL-9) adaydır.
