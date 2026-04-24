@@ -31,7 +31,16 @@ class UKF1D:
         n = len(x)
         points = np.zeros((2 * n + 1, n))
         points[0] = x
-        U = np.linalg.cholesky((n + self.lambd) * P)
+        
+        # Ensure P is symmetric and positive definite
+        P = (P + P.T) / 2 + np.eye(n) * 1e-9
+        
+        try:
+            U = np.linalg.cholesky((n + self.lambd) * P)
+        except np.linalg.LinAlgError:
+            # Fallback to simple identity if Cholesky fails
+            U = np.eye(n) * 0.1
+            
         for i in range(n):
             points[i+1] = x + U[i]
             points[i+n+1] = x - U[i]
@@ -85,6 +94,9 @@ class UKF1D:
         y = measurement - z_pred
         self.x = self.x + (K @ y).flatten()
         self.P = self.P - K @ P_zz @ K.T
+        
+        # Ensure P remains symmetric
+        self.P = (self.P + self.P.T) / 2
         
         return self.x[0]
 

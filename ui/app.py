@@ -176,9 +176,38 @@ def handle_sim_control(data):
 
 
 # ── Background emitter ────────────────────────────────────────────────────────
+from modules.ai_specialist.explainability import AIExplainer
+from sim.ai_adversary import AIAdversary
+
+explainer = AIExplainer()
+adversary = AIAdversary()
+
 def background_thread():
     while True:
+        # Simulate AI Adversary
+        jamming_status = orchestrator.latest_results.get("ea_status", {})
+        jam_action = jamming_status.get("action", "STANDBY")
+        
+        is_jammed = adversary.detect_jamming(jam_action)
+        adversary.act(is_jammed)
+        
+        # Inject adversary signal into environment
+        if not hasattr(orchestrator.env, 'active_signals') or orchestrator.env.active_signals is None:
+            orchestrator.env.active_signals = []
+            
+        adv_sig = adversary.get_signal_params()
+        # Clean old adversary signals to avoid duplication
+        orchestrator.env.active_signals = [s for s in orchestrator.env.active_signals if not s.get('is_adversary')]
+        orchestrator.env.active_signals.append(adv_sig)
+        
         results = orchestrator.run_cycle()
+        
+        # Add AI Explainability messages
+        results["ai_explanation"] = {
+            "dqn": explainer.explain_dqn(jamming_status),
+            "adversary": explainer.explain_adversary(adversary.state, adversary.integrity)
+        }
+        
         socketio.emit('new_spectrum_data', results)
         time.sleep(UPDATE_INTERVAL_MS / 1000.0)
 

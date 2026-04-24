@@ -150,7 +150,7 @@ class SystemOrchestrator:
                     "freq_mhz":      det["freq_mhz"],
                     "bandwidth_hz":  round(bw * hz_per_bin),
                     "snr":           round(det.get("snr", 0), 1),
-                    "mod_type":      mod_type,
+                    "type":          mod_type,
                     "confidence":    round(confidence, 2),
                     "threat_level":  threat_level,
                     "aoa":           round(aoa, 1),
