@@ -34,7 +34,7 @@ def start_external_simulator():
         sim_proc = subprocess.Popen(
             [sys.executable, script_path],
             env=my_env,
-            creationflags=subprocess.CREATE_NEW_PROCESS_GROUP if os.name == 'nt' else 0
+            creationflags=getattr(subprocess, 'CREATE_NEW_PROCESS_GROUP', 512) if os.name == 'nt' else 0
         )
     except Exception as e:
         print(f"[!] Simülatör başlatma hatası: {e}")
@@ -86,21 +86,24 @@ def get_stats():
     r = orchestrator.latest_results
     if not r:
         return jsonify({})
-    ea = r.get('ea_status', {})
-    ss = r.get('spectrum_stats', {})
-    return jsonify({
-        "target_count":   ea.get('target_count', 0),
-        "total_reward":   ea.get('reward', 0),
-        "epsilon":        ea.get('epsilon', 1.0),
-        "episode":        ea.get('episode', 0),
-        "q_states":       ea.get('q_states', 0),
-        "occupancy_pct":  ss.get('occupancy_pct', 0),
-        "peak_pwr_dbm":   ss.get('peak_pwr_dbm', -100),
-        "active_sigs":    ss.get('active_sigs', 0),
-        "current_action": ea.get('action', 'STANDBY'),
-        "rf_source":      ss.get('rf_source', 'LOCAL'),
-        "denoiser_on":    ss.get('denoiser_on', True),
-    })
+    try:
+        ea = r.get('ea_status') or {}
+        ss = r.get('spectrum_stats') or {}
+        return jsonify({
+            "target_count":   ea.get('target_count', 0),
+            "total_reward":   ea.get('reward', 0),
+            "epsilon":        ea.get('epsilon', 1.0),
+            "episode":        ea.get('episode', 0),
+            "q_states":       ea.get('q_states', 0),
+            "occupancy_pct":  ss.get('occupancy_pct', 0),
+            "peak_pwr_dbm":   ss.get('peak_pwr_dbm', -100),
+            "active_sigs":    ss.get('active_sigs', 0),
+            "current_action": ea.get('action', 'STANDBY'),
+            "rf_source":      ss.get('rf_source', 'LOCAL'),
+            "denoiser_on":    ss.get('denoiser_on', True),
+        })
+    except Exception as e:
+        return jsonify({"error": "Internal Error", "details": str(e)}), 500
 
 
 @app.route('/api/history')
@@ -125,19 +128,25 @@ def get_v1_telemetry():
     if not r:
         return jsonify({"status": "unavailable"}), 503
     
-    return jsonify({
-        "version": "6.0.0", # System core version
-        "timestamp": r.get("timestamp"),
-        "swarm": orchestrator.friendly_nodes,
-        "intel": {
-            "signals": [
-                {k: v for k, v in s.items() if k not in ["waterfall_slice"]} 
-                for s in r.get("signals", [])
-            ],
-            "stats": r.get("spectrum_stats")
-        },
-        "action": r.get("ea_status")
-    })
+    try:
+        sigs = r.get("signals")
+        if not isinstance(sigs, list): sigs = []
+        
+        return jsonify({
+            "version": "6.0.0", # System core version
+            "timestamp": r.get("timestamp"),
+            "swarm": orchestrator.friendly_nodes,
+            "intel": {
+                "signals": [
+                    {k: v for k, v in s.items() if k not in ["waterfall_slice"]} 
+                    for s in sigs if isinstance(s, dict)
+                ],
+                "stats": r.get("spectrum_stats")
+            },
+            "action": r.get("ea_status")
+        })
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # ── Socket events ─────────────────────────────────────────────────────────────

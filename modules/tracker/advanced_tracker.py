@@ -132,7 +132,13 @@ class AdvancedTracker:
                 filt_aoa = t['kf_aoa'].update(float(det['aoa']))
                 t['age'], t['hits'] = 0, t.get('hits', 0) + 1
                 updated_ids.add(best_id)
-                det.update({'track_id': f"TRK-{best_id:04d}", 'track_hits': t['hits'], 'aoa': round(filt_aoa, 1)})
+                det.update({
+                    'track_id': f"TRK-{best_id:04d}", 
+                    'track_hits': t['hits'], 
+                    'aoa': round(filt_aoa, 1),
+                    'freq_vel': round(float(t['kf_freq'].x[1]), 3),
+                    'aoa_vel': round(float(t['kf_aoa'].x[1]), 3)
+                })
             else:
                 nid = self.next_id
                 self.next_id += 1
@@ -142,7 +148,12 @@ class AdvancedTracker:
                     'kf_aoa': UKF1D(det['aoa'], KALMAN_PROCESS_NOISE_AOA, KALMAN_MEAS_NOISE_AOA)
                 }
                 updated_ids.add(nid)
-                det.update({'track_id': f"TRK-{nid:04d}", 'track_hits': 1})
+                det.update({
+                    'track_id': f"TRK-{nid:04d}", 
+                    'track_hits': 1,
+                    'freq_vel': 0.0,
+                    'aoa_vel': 0.0
+                })
             results.append(det)
 
         for tid in list(self.tracks.keys()):
