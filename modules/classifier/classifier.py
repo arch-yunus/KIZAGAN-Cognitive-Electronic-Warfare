@@ -8,8 +8,10 @@ from core.config import THREAT_MAP
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 try:
     from cnn_model import ModulationCNN
+    from zero_shot_detector import ZeroShotDetector
 except ImportError:
     ModulationCNN = None
+    ZeroShotDetector = None
 
 class ModulationClassifier:
     """Classifies RF signal modulation type using CNN and advanced spectral features."""
@@ -21,17 +23,26 @@ class ModulationClassifier:
         
         # Load the trained CNN model
         model_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "models/modulation_cnn.pt")
-        if os.path.exists(model_path) and ModulationCNN is not None:
-            try:
-                checkpoint = torch.load(model_path, map_location=self.device)
-                self.model = ModulationCNN(num_classes=len(self.classes))
-                self.model.load_state_dict(checkpoint['model_state_dict'])
-                self.model.to(self.device)
-                self.model.eval()
-                self.classes = checkpoint.get('classes', self.classes)
-                print(f"[Classifier] CNN Modeli yüklendi: {len(self.classes)} sınıf.")
-            except Exception as e:
-                print(f"[Classifier] Model yükleme hatası: {e}")
+        if ModulationCNN is not None:
+            self.model = ModulationCNN(num_classes=len(self.classes))
+            self.model.to(self.device)
+            self.model.eval()
+            
+            if os.path.exists(model_path):
+                try:
+                    checkpoint = torch.load(model_path, map_location=self.device)
+                    # Use non-strict loading to handle Minor architecture changes if possible, 
+                    # but here we mostly care about catching the mismatch error.
+                    self.model.load_state_dict(checkpoint['model_state_dict'])
+                    self.classes = checkpoint.get('classes', self.classes)
+                    print(f"[Classifier] CNN Modeli yüklendi: {len(self.classes)} sınıf.")
+                except Exception as e:
+                    print(f"[Classifier] Model ağırlıkları yüklenemedi (Mimari uyuşmazlığı olabilir): {e}")
+                    print(f"[Classifier] Faz 1 mimarisi ile taze başlatma (Fresh Initialization) yapılıyor.")
+            else:
+                print(f"[Classifier] Model dosyası bulunamadı, rastgele ağırlıklarla başlatıldı.")
+        
+        self.zs_detector = ZeroShotDetector() if ZeroShotDetector is not None else None
 
     def _calculate_spectral_moments(self, psd_slice):
         """Calculates 1st-4th order spectral moments and flatness."""
@@ -98,6 +109,12 @@ class ModulationClassifier:
                     probs = torch.softmax(outputs, dim=1)
                     conf, pred = torch.max(probs, 1)
                     
+                # 1.1 Zero-Shot Check (Phase 2)
+                if self.zs_detector and 'denoised_psd' in signal_data:
+                    is_unknown, mse, zs_conf = self.zs_detector.analyze_anomaly(psd_slice, signal_data['denoised_psd'])
+                    if is_unknown:
+                        return "Unknown (Zero-Shot)", zs_conf, "CRITICAL"
+
                 mod_type = self.classes[pred.item()]
                 confidence = conf.item()
                 threat_level = THREAT_MAP.get(mod_type, "MEDIUM")
