@@ -1,13 +1,13 @@
-# 🛰️ Aegis-AI OMEGA v10.0 | Cognitive Electronic Warfare Suite
+# 🛰️ KIZAGAN-OS v10.0 | Göklerin Muhafızı (Cognitive EW Suite)
 
-![Aegis-AI Banner](banner.png)
+![KIZAGAN-OS Banner](banner.png)
 
-[![Version](https://img.shields.io/badge/version-10.0.0-gold.svg)](https://github.com/bahattinyunus/Otonom-Elektronik-Harp-Sistemi)
+[![Version](https://img.shields.io/badge/version-10.0.0-gold.svg)](https://github.com/arch-yunus/Otonom-Elektronik-Harp-Sistemi)
 [![TEKNOFEST](https://img.shields.io/badge/TEKNOFEST-2026-red.svg)](https://www.teknofest.org/)
 [![Status](https://img.shields.io/badge/TRL-9.5-success.svg)](#)
 [![AI Level](https://img.shields.io/badge/Cognitive_AI-Superiority-gold.svg)](#)
 
-**Aegis-AI OMEGA**, modern elektromanyetik spektrum operasyonlarında (EMSO) Derin Öğrenme (DL) ve Pekiştirmeli Öğrenme (RL) metodolojilerini merkezileştiren, otonom bir **Bilişsel Elektronik Harp (Cognitive EW)** platformudur. Sistem, LPI radarları ve frekans atlamalı haberleşme sistemlerine karşı proaktif üstünlük kurmak üzere tasarlanmıştır.
+**KIZAGAN-OS**, modern elektromanyetik spektrum operasyonlarında (EMSO) Derin Öğrenme (DL) ve Pekiştirmeli Öğrenme (RL) metodolojilerini merkezileştiren, otonom bir **Bilişsel Elektronik Harp (Cognitive EW)** platformudur. Adını Türk mitolojisindeki savaş ve göklerin koruyucusu tanrısından alan sistem, LPI radarları ve FHSS sistemlerine karşı mutlak spektral üstünlük kurmak üzere tasarlanmıştır.
 
 ---
 
@@ -83,7 +83,7 @@ Sisteme `http://localhost:5000` üzerinden erişebilirsiniz.
 
 ## 🧠 Bilişsel Yapay Zeka Evrim Planı (Cognitive AI Strategic Roadmap)
 
-Aegis-AI OMEGA sisteminin kalbini oluşturan Bilişsel Motor'un (Cognitive Engine) sahada tam otonom bir "Elektronik Harp Subayı"na dönüşebilmesi için belirlenmiş çok katmanlı, askeri sınıf AI stratejisidir:
+KIZAGAN-OS sisteminin kalbini oluşturan Bilişsel Motor'un (Cognitive Engine) sahada tam otonom bir "Elektronik Harp Subayı"na dönüşebilmesi için belirlenmiş çok katmanlı, askeri sınıf AI stratejisidir:
 
 ### 🟩 FAZ I: Sensör Füzyonu ve Hızlı Teşhis (Mevcut Durum & Yakın Vade)
 - **Derin Sinyal Teşhisi:** Mevcut 1D-CNN modülasyon sınıflandırıcının, daha karmaşık dalga formları (LPI radar dizileri, FHSS sekansları) için kompleks değerli sinir ağlarına (CVNN) dönüştürülmesi.

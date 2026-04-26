@@ -224,5 +224,5 @@ def background_thread():
 if __name__ == '__main__':
     t = threading.Thread(target=background_thread, daemon=True)
     t.start()
-    print(f"Otonom-EH Dashboard: http://localhost:{UI_PORT}")
+    print(f"KIZAGAN-OS Dashboard: http://localhost:{UI_PORT}")
     socketio.run(app, host=UI_HOST, port=UI_PORT, debug=False)

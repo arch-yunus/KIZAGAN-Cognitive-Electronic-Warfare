@@ -4,7 +4,7 @@ import os
 
 def main():
     print("--------------------------------------------------")
-    print("   OTONOM ELEKTRONIK HARP SISTEMI (LAUNCHER)      ")
+    print("   KIZAGAN-OS v10.0 (GÖKLERİN MUHAFIZI)           ")
     print("--------------------------------------------------")
     
     # Check if we are in the right directory
