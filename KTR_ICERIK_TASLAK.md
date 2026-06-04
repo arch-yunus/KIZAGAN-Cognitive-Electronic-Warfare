@@ -31,8 +31,9 @@ Spektrumdaki karmaşık ve stokastik gürültüleri filtrelemek için **PyTorch*
 *   Sinyal çıktısı, asıl veriyle belli bir alfa katsayısı (%80 Denoised, %20 Original) üzerinden harmanlanarak istatistiksel orijinalliğini korur.
 
 ### 3.3. RFI Signature (RF Parmak İzi) ve Yön Bulma
-*   1D-CNN modülasyon sınıflandırma modeli aracılığıyla modülasyon tipleri ve merkez frekans kestirimi yapılırken, hedefe özgü bir **RFI Hash (Parmak İzi)** oluşturulur.
-*   **TDOA** ve **UKF (Unscented Kalman Filter)** modülleriyle hedefin hareketli manevraları yüksek AoA hassasiyetiyle takip edilir. Hedefin frekans atlama örüntüsü LSTM ağları (Hop Predictor) ile tahmin edilerek **"Autonomous Frequency Chasing"** gerçekleştirilir.
+*   **Multimodal AMC (ResNet-1D & Channel Attention):** Ham I/Q verileri (Batch, 2, 128) üzerinde çalışan, ResBlock ve Squeeze-and-Excitation (Kanal Dikkat) mekanizmalarıyla güçlendirilmiş mimari sayesinde modülasyon deşifresi yapılır ve **RFI Hash (Parmak İzi)** oluşturulur.
+*   **TDOA** ve **UKF (Unscented Kalman Filter)** modülleriyle hedefin hareketli manevraları yüksek AoA hassasiyetiyle takip edilir.
+*   **Transformer Tabanlı Hop Predictor:** Hedefin frekans atlama örüntüsü, geleneksel LSTM'ler yerine Positional Encoding ve Multi-Head Self-Attention kullanan Transformer ağı ile saniyenin altında tahmin edilerek otonom frekans takibi (Autonomous Frequency Chasing) icra edilir.
 
 ## 4. ELEKTRONİK TAARRUZ (EA) BİLİŞSEL STRATEJİ MİMARİSİ
 
@@ -53,7 +54,7 @@ DQN ajanının başarısı karmaşık bir ödül mekanizmasıyla ölçülür:
 *   **SWaP-C ve Donanım:** Saha operasyonlarının fiziksel sınırlarını esneten sistem, 16.2 kg ağırlığındaki karbon fiber şasisi ve aktif Peltier takviyeli sıvı soğutma sistemiyle yüksek görev yüklerinde kesintisiz performans sunar. Pik yük altında sadece 140W güç tüketimiyle katı SWaP-C limitlerine tam uyum sağlar.
 *   **Edge-AI ve Operasyonel Hız:** TensorRT ve INT8 kuantizasyonu sayesinde Jetson Orin Nano gibi uç birimlerde (Edge-AI) sıfır gecikmeyle çalışır.
 *   **Bayesian Karar Mekanizması:** Belirsizlik senaryolarında Bayesian mantığıyla otonom karıştırma ve aldatma (GNSS, Telsiz, DRFM RGPO/VGPO) stratejilerini belirler.
-*   **C2 ve Analiz:** Flask-SocketIO C2 (Command & Control) paneli ve otonom Görev Sonu Analizi (AAR) ile hedeflerin durumu ve ajan karar döngüsü loglanır.
+*   **C2 ve XAI (Açıklanabilir Yapay Zeka):** Flask-SocketIO C2 (Command & Control) paneli, HIL (Hardware-in-the-Loop) Telemetry API desteği ve AI Explainer modülü sayesinde yapay zekanın (DQN ajanı) neden o taarruz kararını aldığını anlık olarak operatöre açıklar (Explainable AI). Ayrıca otonom Görev Sonu Analizi (AAR) ile hedeflerin durumu loglanır.
 
 ---
 **Rapor Hazırlama Notu:** Bu dokümanı KTR şablonundaki *Sistem Mimarisi*, *Yazılım Mimarisi* ve *Algoritma Tasarımı* alt başlıklarına kopyalayabilirsiniz. Metin içindeki Deep Learning mimarileri (U-Net, DQN, CA-CFAR hibrit CV yaklaşımı vb.) projenizin özgün değerini jüri önünde en yüksek noktaya taşıyacaktır.
