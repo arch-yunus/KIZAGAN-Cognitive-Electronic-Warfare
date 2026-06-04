@@ -13,9 +13,15 @@
 
 ## 🏛️ Mimari Katmanlar (v10.0)
 
+![Sistem Mimarisi](sistem-mimarisi.png)
+![Sistem Blok Şeması](sistem_blok_semasi.png)
+
+
 Sistem, donanım bağımsızlığı ve yüksek performans için 4 kritik katmanda mimarize edilmiştir:
 
 ### 1. SDR Hardware Abstraction Layer (HAL)
+
+![Donanım Mimarisi](donanim-mimarisi.png)
 - **HW-Agnostic:** USRP, HackRF, RTLSDR ve `RFEnvironment` (Simülasyon) katmanları arasında kesintisiz geçiş.
 - **MIMO Senkronizasyonu:** Çoklu alıcı nodları (ES-Nod) arasında faz senkronizasyonu ve TDOA optimizasyonu.
 
@@ -49,7 +55,10 @@ graph TD
     G --> H[Look-Through Loop]
 ```
 
-### Swarm Collaborative Intelligence
+### Swarm Collaborative Intelligence (TDOA Konsepti)
+
+![TDOA Konsepti](tdoa-konsepti.png)
+
 Sistem, birden fazla "Paydaş" nod ile spektral veriyi paylaşarak otonom de-confliction ve sürü tabanlı taarruz kabiliyeti sunar.
 
 ### Strategic Reporting (AAR)
