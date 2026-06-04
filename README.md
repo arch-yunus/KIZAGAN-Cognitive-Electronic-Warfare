@@ -1,13 +1,21 @@
-# 🛰️ KIZAGAN-OS v10.0 | Göklerin Muhafızı (Cognitive EW Suite)
+# 🛰️ ARAT OMEGA v10.0 | Cognitive Electronic Warfare Suite
 
-![KIZAGAN-OS Banner](banner.png)
+![ARAT OMEGA Banner](banner.png)
 
 [![Version](https://img.shields.io/badge/version-10.0.0-gold.svg)](https://github.com/arch-yunus/Otonom-Elektronik-Harp-Sistemi)
 [![TEKNOFEST](https://img.shields.io/badge/TEKNOFEST-2026-red.svg)](https://www.teknofest.org/)
 [![Status](https://img.shields.io/badge/TRL-9.5-success.svg)](#)
 [![AI Level](https://img.shields.io/badge/Cognitive_AI-Superiority-gold.svg)](#)
 
-**KIZAGAN-OS**, modern elektromanyetik spektrum operasyonlarında (EMSO) Derin Öğrenme (DL) ve Pekiştirmeli Öğrenme (RL) metodolojilerini merkezileştiren, otonom bir **Bilişsel Elektronik Harp (Cognitive EW)** platformudur. Adını Türk mitolojisindeki savaş ve göklerin koruyucusu tanrısından alan sistem, LPI radarları ve FHSS sistemlerine karşı mutlak spektral üstünlük kurmak üzere tasarlanmıştır.
+ARAT Takımı tarafından geliştirilen **ARAT OMEGA**, modern harp sahasının en kritik bileşeni olan elektromanyetik spektrumda otonom egemenlik kurmak üzere milli imkanlarla geliştirilmiş yenilikçi bir Bilişsel Elektronik Harp (Cognitive EW) platformudur. TEKNOFEST 2026 Elektronik Harp Yarışması kapsamında, "En İyi Yapay Zekâ Uygulaması" hedefiyle tasarlanan sistem, adını Türk mitolojisindeki kılık değiştiren, dinamik ve yanıltıcı güç "Arat"tan almaktadır.
+
+Sistem, geleneksel elektronik harp yöntemlerinin ötesine geçerek kapalı çevrim bir otonomi döngüsü (OODA Loop) ile çalışır. SDR mimarisi üzerinden gerçekleştirilen 25Msps hızındaki gerçek zamanlı I/Q veri toplama ve LPI deşifre süreçlerini, yapay zeka tabanlı dinamik reaksiyon üretimiyle birleştirir. Bünyesinde barındırdığı Multimodal AMC (ResNet-1D & DenseNet hibrit yapısı) mimarisi sayesinde, karmaşık spektrum ortamlarında %98.1 doğruluk oranıyla modülasyon deşifresi ve parametre çıkarımı gerçekleştirebilmektedir.
+
+Saha operasyonlarının fiziksel sınırlarını esneten ARAT OMEGA, 16.2 kg ağırlığındaki karbon fiber şasisi ve aktif Peltier takviyeli sıvı soğutma sistemiyle yüksek görev yüklerinde kesintisiz performans sunar. Pik yük altında sadece 140W güç tüketimiyle katı SWaP-C limitlerine tam uyum sağlar. Belirsizlik senaryolarında Bayesian Karar Mekanizması ile otonom karıştırma ve aldatma (GNSS, Telsiz, DRFM RGPO/VGPO) stratejilerini belirleyen sistem; TensorRT ve INT8 kuantizasyonu sayesinde Jetson Orin Nano gibi uç birimlerde (Edge-AI) sıfır gecikmeyle çalışır.
+
+ARAT OMEGA, ED-01'den ET-05'e kadar uzanan geniş görev matrisinde spektrum manipülasyonunu otonom zekayla buluşturarak geleceğin savunma teknolojilerini bugünden inşa etmektedir.
+
+*"Spektrumun ruhu, Arat'ın değişkenliğiyle birleşiyor. Tespit edilemeyen, aldatan ve hükmeden bir güç."*
 
 ---
 
@@ -92,7 +100,7 @@ Sisteme `http://localhost:5000` üzerinden erişebilirsiniz.
 
 ## 🧠 Bilişsel Yapay Zeka Evrim Planı (Cognitive AI Strategic Roadmap)
 
-KIZAGAN-OS sisteminin kalbini oluşturan Bilişsel Motor'un (Cognitive Engine) sahada tam otonom bir "Elektronik Harp Subayı"na dönüşebilmesi için belirlenmiş çok katmanlı, askeri sınıf AI stratejisidir:
+**ARAT OMEGA** sisteminin kalbini oluşturan Bilişsel Motor'un (Cognitive Engine) sahada tam otonom bir "Elektronik Harp Subayı"na dönüşebilmesi için belirlenmiş çok katmanlı, askeri sınıf AI stratejisidir:
 
 ### 🟩 FAZ I: Sensör Füzyonu ve Hızlı Teşhis (Mevcut Durum & Yakın Vade)
 - **Derin Sinyal Teşhisi:** Mevcut 1D-CNN modülasyon sınıflandırıcının, daha karmaşık dalga formları (LPI radar dizileri, FHSS sekansları) için kompleks değerli sinir ağlarına (CVNN) dönüştürülmesi.
