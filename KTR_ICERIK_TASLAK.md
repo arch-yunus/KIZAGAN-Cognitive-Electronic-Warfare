@@ -1,11 +1,11 @@
-# ARAT OMEGA v10.0 - Kavramsal Tasarım Raporu (KTR) İçerik Taslağı (Genişletilmiş Versiyon)
+﻿# KIZAGAN OMEGA v10.0 - Kavramsal Tasarım Raporu (KTR) İçerik Taslağı (Genişletilmiş Versiyon)
 
 Bu doküman, repodaki kaynak kodların (Python, PyTorch, OpenCV tabanlı modüller) derinlemesine analizi sonucunda, KTR şablonunda doğrudan teknik yeterliliği kanıtlamak amacıyla kullanılacak akademik ve mühendislik detaylarıyla güncellenmiştir.
 
 ---
 
 ## 1. SİSTEMİN AMACI VE GENEL TANIMI
-ARAT Takımı tarafından geliştirilen **ARAT OMEGA**, modern harp sahasının en kritik bileşeni olan elektromanyetik spektrumda otonom egemenlik kurmak üzere milli imkanlarla geliştirilmiş yenilikçi bir Bilişsel Elektronik Harp (Cognitive EW) platformudur. TEKNOFEST 2026 Elektronik Harp Yarışması kapsamında, "En İyi Yapay Zekâ Uygulaması" hedefiyle tasarlanan sistem, adını Türk mitolojisindeki kılık değiştiren, dinamik ve yanıltıcı güç "Arat"tan almaktadır.
+ARAT Takımı tarafından geliştirilen **KIZAGAN OMEGA**, modern harp sahasının en kritik bileşeni olan elektromanyetik spektrumda otonom egemenlik kurmak üzere milli imkanlarla geliştirilmiş yenilikçi bir Bilişsel Elektronik Harp (Cognitive EW) platformudur. TEKNOFEST 2026 Elektronik Harp Yarışması kapsamında, "En İyi Yapay Zekâ Uygulaması" hedefiyle tasarlanan sistem, adını Türk mitolojisindeki kılık değiştiren, dinamik ve yanıltıcı güç "Arat"tan almaktadır.
 
 Sistem, geleneksel elektronik harp yöntemlerinin ötesine geçerek kapalı çevrim bir otonomi döngüsü (OODA Loop) ile çalışır. SDR mimarisi üzerinden gerçekleştirilen 25Msps hızındaki gerçek zamanlı I/Q veri toplama ve LPI deşifre süreçlerini, yapay zeka tabanlı dinamik reaksiyon üretimiyle birleştirir. Bünyesinde barındırdığı Multimodal AMC (ResNet-1D & DenseNet hibrit yapısı) mimarisi sayesinde, karmaşık spektrum ortamlarında %98.1 doğruluk oranıyla modülasyon deşifresi ve parametre çıkarımı gerçekleştirebilmektedir.
 
