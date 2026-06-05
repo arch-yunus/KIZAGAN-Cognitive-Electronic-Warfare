@@ -135,10 +135,12 @@ SWaP-C limitlerine tam uyum sağlayan KIZAGAN OMEGA'nın detayları:
 ### 4.1 Sinyal Tespiti
 Sinyal tespiti sadece 1B enerji analiziyle değil, hibrit **CA-CFAR + Computer Vision** mimarisi ile sağlanır. 1 boyutlu konvolüsyonel pencerelerle dinamik gürültü zemini (Noise Floor) tahmin edilir. Bu spektral geçmiş, 2B şelale imgesine dönüştürülüp OpenCV `adaptiveThreshold` ile morfolojik olarak doğrulanır. Bu sayede, düşman gürültü bastırmasına karşı yapay zekanın "körleşmesi" kesin olarak engellenir.
 *(Buraya C2 ekranındaki şelale (waterfall) ve tespit kutucuklarının görselini ekleyiniz.)*
+![Sinyal Tespiti Şelale Ekranı](c2_waterfall_ui.png)
 
 ### 4.2 Parametre Çıkarımı
 Parametre çıkarımı **Multimodal AMC (ResNet-1D & DenseNet hibrit)** ağı ile icra edilir. Ham I/Q verileri (Batch, 2, 128 matrisi) Squeeze-and-Excitation (Kanal Dikkat) mekanizmalarından geçirilerek sinyalin frekansı, bant genişliği ve modülasyonu tespit edilir. Bu derin öğrenme mimarisi karmaşık senaryolarda %98.1 doğruluk sunarken, her hedefe özgü bir *RFI Hash (Parmak İzi)* çıkartır.
 *(Buraya analiz ekranını, Modülasyon Tipi / Frekans / Bant genişliği listelenen UI tablosunu ekleyiniz.)*
+![Parametre Çıkarımı Analiz Ekranı](c2_analysis_ui.png)
 
 ### 4.3 Sinyal İzleme ve Dinleme
 Tespit edilen hareketli/frekans atlayan sinyallerin sürekliliği **Transformer Tabanlı Hop Predictor** ile sağlanır. Geleneksel LSTM yerine "Positional Encoding" ve "Multi-Head Self-Attention" kullanan bu ağ, FHSS bir telsizin bir sonraki sıçrama (hop) frekansını milisaniyeler içinde kestirerek Otonom Frekans Takibi icra eder. Sinyalin içeriği temizlendikten sonra (Neural Denoising) dinleme / deşifre bloğuna aktarılır.
@@ -146,6 +148,7 @@ Tespit edilen hareketli/frekans atlayan sinyallerin sürekliliği **Transformer 
 ### 4.4 Yön Bulma (DF)
 Sistemimiz yüksek isabet oranına sahip **Varış Zaman Farkı (TDOA)** yöntemini kullanmaktadır. Dağıtık ES-Nod'larından ("SCOUT") gelen I/Q verilerinin varış zamanlarındaki mikrosaniyelik farklar, merkezi birimde Cross-Correlation algoritmalarıyla işlenir. Non-lineer hedef hareketlerinin filtrelemesinde **UKF (Unscented Kalman Filter)** kullanılarak ~2.5° RMS AoA doğruluğuna ulaşılır.
 *(Buraya C2 ekranındaki Açı ve Radar tespit UI görselini ekleyiniz.)*
+![Yön Bulma (AoA) Radar Ekranı](c2_radar_ui.png)
 
 ### 4.5 Konum Belirleme
 TDOA üzerinden elde edilen LOB (Line of Bearing) vektörleri, Bayes Karar Mekanizması süzgecinden geçirilerek hiperbolik kesişim uzayında birleştirilir ve hedefin 2B/3B mutlak konumu tayin edilir. Bu görev en az 3 dağıtık sensör ile sağlanmakta olup, dost nodların birbirini konumlamaması için "Collaborative Interference Avoidance" ile güvenceye alınmıştır.
@@ -159,6 +162,7 @@ TDOA üzerinden elde edilen LOB (Line of Bearing) vektörleri, Bayes Karar Mekan
 ### 5.1 Sürekli Karıştırma
 Statik kurallar yerine, KIZAGAN OMEGA taarruz kararını **Deep Q-Network (DQN) Ajanı** ile alır. Hedefin KRİTİK veya YÜKSEK risk derecesine göre ajan otonom olarak *Spot* veya *Barrage* karıştırma seçer. Sistem "Açıklanabilir Yapay Zeka (XAI)" altyapısı (AI Explainer modülü) sayesinde ekranda operatöre *neden o spesifik karıştırma türünü seçtiğini* şeffafça loglar.
 *(Buraya taarruz edilen hedef ve DQN durum ekranlarını ekleyiniz.)*
+![DQN Karıştırma Durum Ekranı](dqn_attack_ui.png)
 
 ### 5.2 Arabakışlı Karıştırma
 Arabakış (Look-Through) tekniğinde, karıştırma sırasında ES biriminin körleşmemesi için görev döngüsü (duty-cycle) milisaniye seviyesinde otonom olarak ayarlanır. Kendi dost sensörlerini korumak için sistem, Dost RFI Parmak izlerini tanır ve yanlışlıkla onları karıştırmamak adına görev paylaşımını dinamik olarak senkronize eder.
@@ -169,6 +173,7 @@ Hedefin telsiz haberleşmesini simüle edebilmek için DRFM benzeri bir IQ kayı
 ### 5.4 GNSS Aldatma
 Jetson Orin Nano üzerinden sentezlenen GNSS L1 spoofing sinyalleri ile hedef sistemlere yavaş yavaş artan bir sapma enjekte edilir (Walk-off tekniği). Bu sayede hedefin konumu kademeli olarak manipüle edilirken, hedefin anti-spoofing filtrelerini tetiklemekten kaçınılır.
 *(GNSS Spoofing arayüzü veya simülatör ekran görüntüsü buraya eklenecektir.)*
+![GNSS Aldatma Simülatör Ekranı](gnss_spoofing_ui.png)
 
 ## 6. SİMÜLASYON VE TEST
 
