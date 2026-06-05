@@ -77,11 +77,16 @@ KIZAGAN OMEGA, donanım bağımsızlığı (HW-Agnostic) sağlamak adına **SDR 
 *   **Cognitive Detection (Algılama):** SDR'dan alınan I/Q verileri öncelikle *Neural Denoiser* (1D U-Net Autoencoder) katmanından geçirilerek gürültüden arındırılır.
 *   **AI Engine (Karar Merkezi):** Sinyal, CA-CFAR eşiklemesinden sonra ResNet-1D tabanlı AMC ile sınıflandırılır ve Bayesian mantığı + Deep Q-Network (DQN) tarafından değerlendirilip ET kararı alınır.
 *   **C2 ve XAI:** Tüm bu veri akışı HIL Telemetry üzerinden uç birimlerden (Edge) ana ekrana iletilir.
-*(Buraya `sistem-mimarisi.png` ve `sistem_blok_semasi.png` görsellerini ekleyiniz.)*
+
+![Sistem Mimarisi](sistem-mimarisi.png)
+![Sistem Blok Şeması](sistem_blok_semasi.png)
 
 ### 3.2 Sistem ve Alt Sistemlerin Üç Boyutlu Tasarımı
 Sistem operasyon sahasında zorlu fiziksel koşullara dayanacak şekilde tasarlanmıştır. Şasi, sinyal geçirgenliği minimize edilmiş radyasyon korumalı karbon fiberden üretilmiştir. Operasyon esnasında bir İKA'ya entegre edilebileceği gibi, otonom tripodlar üzerinde sabit olarak da çalışabilir.
-*(Buraya sisteminizin CAD tasarımlarını, anten yerleşimini ve termal tahliye (Peltier) ızgaralarının tasarım görsellerini ekleyiniz.)*
+
+![Donanım Mimarisi](donanim-mimarisi.png)
+
+*(Buraya ayrıca sisteminizin CAD tasarımlarını, anten yerleşimini ve termal tahliye (Peltier) ızgaralarının tasarım görsellerini ekleyebilirsiniz.)*
 
 ### 3.3 Sistem ve Alt Sistemlerin SWaP Bilgisi
 SWaP-C limitlerine tam uyum sağlayan KIZAGAN OMEGA'nın detayları:
@@ -108,7 +113,10 @@ Sistemimiz yüksek isabet oranına sahip **Varış Zaman Farkı (TDOA)** yöntem
 
 ### 4.5 Konum Belirleme
 TDOA üzerinden elde edilen LOB (Line of Bearing) vektörleri, Bayes Karar Mekanizması süzgecinden geçirilerek hiperbolik kesişim uzayında birleştirilir ve hedefin 2B/3B mutlak konumu tayin edilir. Bu görev en az 3 dağıtık sensör ile sağlanmakta olup, dost nodların birbirini konumlamaması için "Collaborative Interference Avoidance" ile güvenceye alınmıştır.
-*(Buraya `tdoa-konsepti.png` harita/radar ekranı görselini ekleyiniz.)*
+
+![TDOA Konsepti](tdoa-konsepti.png)
+
+*(Buraya ek olarak kendi C2 ekranınızdaki harita/radar arayüzü görselini ekleyebilirsiniz.)*
 
 ## 5. ET GÖREVLERİ VE EKRAN GÖRSELLERİ
 
