@@ -79,7 +79,43 @@ KIZAGAN OMEGA, donanım bağımsızlığı (HW-Agnostic) sağlamak adına **SDR 
 *   **C2 ve XAI:** Tüm bu veri akışı HIL Telemetry üzerinden uç birimlerden (Edge) ana ekrana iletilir.
 
 ![Sistem Mimarisi](sistem-mimarisi.png)
-![Sistem Blok Şeması](sistem_blok_semasi.png)
+
+*(Not: Eğer `sistem_blok_semasi.png` görseliniz kayıpsa, aşağıdaki otonom oluşturulmuş blok şemasını kullanabilirsiniz. Bu şema Github üzerinde doğrudan görsel olarak işlenecektir.)*
+
+```mermaid
+graph TD
+    subgraph SENSOR [ES-Nod Algılama Katmanı]
+        SDR_RX[SDR Geniş Bant Alıcı] --> ND[Neural Denoiser / 1D U-Net]
+        ND --> CFAR[CA-CFAR Sinyal Tespiti]
+    end
+
+    subgraph AI_CORE [Yapay Zeka Karar Merkezi]
+        CFAR --> AMC[Multimodal AMC - ResNet-1D]
+        AMC --> HOP[HopTransformer Frekans Tahmini]
+        AMC --> RFI[RFI Parmak İzi Çıkarma]
+        RFI --> BAYES[Bayesian Karar Süzgeci]
+        HOP --> BAYES
+    end
+
+    subgraph SWARM_TDOA [TDOA Konum Belirleme]
+        SDR_RX -.->|Zaman Etiketi| CC[Cross-Correlation Modülü]
+        CC --> UKF[UKF Yörünge Filtresi]
+        UKF --> BAYES
+    end
+
+    subgraph EA_MASTER [EA-Master Taarruz Ünitesi]
+        BAYES --> DQN[Deep Q-Network - Taarruz Ajanı]
+        DQN --> SYNTH[Dalga Şekli Sentezleyici]
+        SYNTH --> SDR_TX[SDR Karıştırıcı / Aldatıcı]
+        SDR_TX --> PA[RF Güç Yükseltici]
+    end
+
+    subgraph C2 [Komuta Kontrol]
+        DQN --> XAI[AI Explainer / XAI]
+        XAI --> UI[Flask-SocketIO Taktik Ekran]
+        BAYES --> UI
+    end
+```
 
 ### 3.2 Sistem ve Alt Sistemlerin Üç Boyutlu Tasarımı
 Sistem operasyon sahasında zorlu fiziksel koşullara dayanacak şekilde tasarlanmıştır. Şasi, sinyal geçirgenliği minimize edilmiş radyasyon korumalı karbon fiberden üretilmiştir. Operasyon esnasında bir İKA'ya entegre edilebileceği gibi, otonom tripodlar üzerinde sabit olarak da çalışabilir.
